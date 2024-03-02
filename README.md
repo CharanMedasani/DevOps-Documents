@@ -69,23 +69,63 @@ sudo systemctl restart jenkins
 sudo docker version
 ```
 
-# Step - 4 : Create Jenkins Job #
+# Step - 4: Create Jenkins Job #
 
 - **Stage-1 : Clone Git Repo** <br/> 
 - **Stage-2 : Maven Build** <br/>
 - **Stage-3 : Create Docker Image** <br/>
 - **Stage-4 : Create Docker Container** <br/>
 	
-# Step - 5 : Trigger Jenkins Job #
+# Step - 5: Trigger Jenkins Job #
 
-# Step - 6 : Enable host port in security group inbound rules #
+# Step - 6: Enable host port in security group inbound rules #
 
-# Step - 7 : Access Application in Browser #
+# Step - 7: Access Application in Browser #
 
 - **We should be able to access our application** <br/>
 
-URL : http://public-ip:port/
+URL: http://public-ip:port/
 	
 # We are done with our Setup #
 	
-## Step - 8 : After your practise, delete resources we have used in AWS Cloud to avoid billing ##
+## Step - 8: After your practice, delete resources we have used in AWS Cloud to avoid billing ##
+
+## code for pipeline setup ##
+
+```
+pipeline{
+    
+    agent any
+    
+    tools{
+        maven 'M3'
+    }
+    
+    stages{
+        stage('git clone'){
+            steps{
+              git 'https://github.com/ashokitschool/maven-web-app.git'  
+            }
+        }
+        stage('mvn build'){
+            steps{
+               sh 'mvn clean package' 
+            }
+        }
+        stage('Docker image'){
+            steps{
+                sh 'docker build -t ashokit .'
+            }
+        }
+        stage('docker deployment'){
+            steps{
+                sh 'docker stop charan'
+                sh 'docker rm charan'
+                sh 'docker run -d -p 9090:8080 --name charan ashokit'
+            }
+        }
+    }
+    
+}
+
+```
