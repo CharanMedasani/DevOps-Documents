@@ -114,14 +114,14 @@ pipeline{
         }
         stage('Docker image'){
             steps{
-                sh 'docker build -t ashokit .'
+                sh 'docker build -t devops .'
             }
         }
         stage('docker deployment'){
             steps{
                 sh 'docker stop charan'
                 sh 'docker rm charan'
-                sh 'docker run -d -p 9090:8080 --name charan ashokit'
+                sh 'docker run -d -p 9090:8080 --name charan devops'
             }
         }
     }
